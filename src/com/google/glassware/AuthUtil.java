@@ -28,8 +28,8 @@ import java.io.IOException;
 import java.util.Collections;
 
 public class AuthUtil {
-  public static final String CLIENT_ID = "YOUR_CLIENT_ID";
-  public static final String CLIENT_SECRET = "YOUR_CLIENT_SECRET";
+  public static final String CLIENT_ID = "544331734796.apps.googleusercontent.com";
+  public static final String CLIENT_SECRET = "mzlzY8EnEgMVzIsBAGt4hdB7";
 
   public static final String GLASS_SCOPE =
       "https://www.googleapis.com/auth/glass.timeline " +
