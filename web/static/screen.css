@@ -1,0 +1,132 @@
+/*
+ * Copyright (C) 2012 Google Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+body {
+  font-family: helvetica, sans-serif;
+  width: 760px;
+  margin: 10px auto;
+}
+
+header {
+  border-bottom: 1px solid #DDD;
+  margin-bottom: 10px;
+}
+
+header h1 {
+  margin-bottom: 2px;
+}
+
+header p {
+  font-style: italic;
+  margin-top: 2px;
+  margin-left: 20px;
+}
+
+table {
+  width: 100%;
+}
+
+th {
+  font-weight: bold;
+}
+
+td, th {
+  border: 1px solid #AAA;
+  margin: 0;
+}
+
+
+button {
+  -moz-box-shadow: inset 0px 1px 0px 0px #ffffff;
+  -webkit-box-shadow: inset 0px 1px 0px 0px #ffffff;
+  box-shadow: inset 0px 1px 0px 0px #ffffff;
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0.05, #ededed), color-stop(1, #dfdfdf));
+  background: -moz-linear-gradient(center top, #ededed 5%, #dfdfdf 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr = '#ededed', endColorstr = '#dfdfdf');
+  background-color: #ededed;
+  -moz-border-radius: 6px;
+  -webkit-border-radius: 6px;
+  border-radius: 6px;
+  border: 1px solid #dcdcdc;
+  display: inline-block;
+  color: #777777;
+  font-family: "helvetica",sans-serif;
+  font-size: 15px;
+  font-weight: bold;
+  padding: 6px 24px;
+  text-decoration: none;
+  text-shadow: 1px 1px 0 #ffffff;
+  width: 180px
+}
+button.delete {
+  padding: 0;
+  width: 25px;
+}
+
+button:hover {
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0.05, #dfdfdf), color-stop(1, #ededed));
+  background: -moz-linear-gradient(center top, #dfdfdf 5%, #ededed 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr = '#dfdfdf', endColorstr = '#ededed');
+  background-color: #dfdfdf;
+}
+
+button:active {
+  position: relative;
+  top: 1px;
+}
+
+.message {
+  display: inline;
+  margin: 20px;
+  padding: 5px 20px;
+  border-radius: 5px;
+  background-color: #FFFFD5;
+}
+
+.share-target-icon, .button-icon {
+  width: 50px;
+}
+
+
+.do {
+  width: 220px;
+  float: left;
+}
+.see {
+  width: 490px;
+  float: right;
+}
+.see .id {
+  width: 50px;
+  overflow: hidden;
+}
+.see img {
+  max-width: 100px;
+  max-height: 100px;
+}
+
+section {
+  border: 1px solid #CCC;
+  border-radius: 5px;
+  margin: 10px;
+  padding: 10px;
+}
+section h2 {
+  border-bottom: 1px solid #CCC;
+}
+
+.sign-out {
+  float: right;
+}
