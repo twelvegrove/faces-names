@@ -16,16 +16,21 @@
 package com.google.glassware;
 
 import com.google.api.client.auth.oauth2.AuthorizationCodeFlow;
+import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.auth.oauth2.TokenResponse;
 import com.google.api.client.googleapis.auth.oauth2.GoogleTokenResponse;
 import com.google.api.client.http.GenericUrl;
+import com.google.api.services.glass.Glass;
+import com.google.api.services.glass.model.Entity;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Arrays;
 
 public class AuthServlet extends HttpServlet {
+  protected Glass service;
 
   @Override
   protected void doGet(HttpServletRequest req, HttpServletResponse res) throws IOException {
@@ -47,6 +52,26 @@ public class AuthServlet extends HttpServlet {
       AuthUtil.setUserId(req, userId);
 
       flow.createAndStoreCredential(tokenResponse, userId);
+      
+      //Do bootstrapping!!
+      Credential credential = AuthUtil.newAuthorizationCodeFlow().loadCredential(userId);
+      Glass glass = GlassClient.getGlass(credential);
+  
+        String shareTargetId = "";
+        String displayName = "Faces";
+        String iconUrl = "";
+	    Entity shareTarget = new Entity();
+	    shareTarget.setId(shareTargetId);
+	    shareTarget.setDisplayName(displayName);
+	    shareTarget.setImageUrls(Arrays.asList(iconUrl));
+	
+	    try {
+	      glass.shareTargets().insert(shareTarget).execute();
+	    } catch (IOException e) {
+	      System.err.println("An error occurred: " + e);
+	    }
+      
+      
       res.sendRedirect(WebUtil.buildUrl(req, "/"));
       return;
     }
