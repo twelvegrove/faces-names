@@ -166,13 +166,14 @@ private Entity myCreator;
   }
   
     private String extractUsefulInfoFromReply(String text) {
+        LOG.info("working with reply transcript " + text);
         if (text == null || text.isEmpty()) {
             return "Unknown...";
         }
-        if (text.toLowerCase().startsWith("this is ") &&
-                text.length()>8) {
-            text.substring(8);
-        }
+//        if (text.toLowerCase().startsWith("this is ") &&
+//                text.length()>8) {
+//            text.substring(8);
+//        }
         return text;
     }
 
@@ -188,9 +189,7 @@ private Entity getCreator(TimelineItem timelineItem, Credential credential) {
       }
 
       for (Entity entity : shareTargets) {
-          System.out.println("\n\nAn shareTarget entity is: " + entity);
           if ("facesandnames".equals(entity.getId())) {
-              System.out.println("Found our creator: " + entity.getId());
               timelineItem.setCreator(entity);
               myCreator = entity;
               return entity;
