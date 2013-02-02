@@ -57,9 +57,9 @@ public class AuthServlet extends HttpServlet {
       Credential credential = AuthUtil.newAuthorizationCodeFlow().loadCredential(userId);
       Glass glass = GlassClient.getGlass(credential);
   
-        String shareTargetId = "";
-        String displayName = "Faces";
-        String iconUrl = "";
+        String shareTargetId = "facesandnames";
+        String displayName = "Faces and Names";
+        String iconUrl = "/static/icons/drill-50.png";
 	    Entity shareTarget = new Entity();
 	    shareTarget.setId(shareTargetId);
 	    shareTarget.setDisplayName(displayName);
