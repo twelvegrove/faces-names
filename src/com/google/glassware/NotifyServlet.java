@@ -125,9 +125,9 @@ private Entity myCreator;
     	  LOG.info("Updating name in timeline item: " + replyTo);
     	  TimelineItem updatedTimelineItem = glassClient.timeline().get(replyTo).execute();
     	  updatedTimelineItem.setHtml(
-          		String.format(cardTemplate,savedURL, transcript+System.currentTimeMillis()));
+          		String.format(cardTemplate,savedURL, transcript));
           glassClient.timeline().update(replyTo, updatedTimelineItem).execute();
-          glassClient.timeline().delete(notification.getItemId());
+          glassClient.timeline().delete(notification.getItemId()).execute();
           return;
       }
       
