@@ -75,6 +75,15 @@ public class NotifyServlet extends HttpServlet {
     String userId = notification.getUserToken();
     Credential credential = AuthUtil.getCredential(userId);
     Glass glassClient = GlassClient.getGlass(credential);
+    
+    // Our custom card template.
+    String cardTemplate = "<article> <section> <span style='position:relative;display:block;height:170px;overflow:hidden;'>" +
+    		"<img style='position:absolute;top:-100px;' src='%s' width='100%%'></span>" + // image source URL
+    		"<table class='text-small align-justify'> <tbody><tr>" +
+    		"<td>%s</td><td>%s</td></tr></tbody></table></section></article>"; // provided name, provided company
+    
+    // Default image for now.
+    String savedURL = "https://lh5.googleusercontent.com/--bS5I_Xf5i4/UQ0sxuqpVYI/AAAAAAAAAEQ/JCxqd1CTfGo/s754/20130202_063613_960.jpg";
 
 
     if(notification.getCollection().equals("locations")) {
@@ -99,8 +108,23 @@ public class NotifyServlet extends HttpServlet {
       // Get the first attachment on that timeline item and do stuff with it
       String attachmentId = null;
       List<Attachment> attachments = timelineItem.getAttachments();
+      
+      // Get the replyTo if it exists.
+      String replyTo = timelineItem.getInReplyTo();
+      
+      
+      if(replyTo != null) {
+    	  // Update the replyTo Timeline item with the text (for now).
+    	  TimelineItem updateTimelineItem = glassClient.timeline().get(replyTo).execute();
+    	  updateTimelineItem.setHtml(
+          		String.format(cardTemplate,savedURL,"New Name","Cyberdyne Systems"));
+          GlassClient.insertTimelineItem(credential, updateTimelineItem);
+          return;
+      }
+      
       if(attachments != null && attachments.size() > 0) {
-        // Get the first attachment
+        // Get the first attachment 
+    	  //TODO Note: replyto attachements don't have IDs!
         attachmentId = attachments.get(0).getId();
         LOG.info("Found attachment with ID " + attachmentId);
 
@@ -113,14 +137,7 @@ public class NotifyServlet extends HttpServlet {
 //                new NotificationConfig().setLevel("audio_only")),
 //            "image/jpeg", stream);
 
-        // Our custom card template.
-        String cardTemplate = "<article> <section> <span style='position:relative;display:block;height:170px;overflow:hidden;'>" +
-        		"<img style='position:absolute;top:-100px;' src='%s' width='100%%'></span>" + // image source URL
-        		"<table class='text-small align-justify'> <tbody><tr>" +
-        		"<td>%s</td><td>%s</td></tr></tbody></table></section></article>"; // provided name, provided company
-        
-        // Default image for now.
-        String savedURL = "https://lh5.googleusercontent.com/--bS5I_Xf5i4/UQ0sxuqpVYI/AAAAAAAAAEQ/JCxqd1CTfGo/s754/20130202_063613_960.jpg";
+
         
         //Create a new timeline Item.
         TimelineItem replyTimelineItem = new TimelineItem();
