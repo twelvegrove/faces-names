@@ -15,6 +15,20 @@
  */
 package com.google.glassware;
 
+import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Writer;
+import java.util.List;
+import java.util.logging.Logger;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.services.glass.Glass;
@@ -25,18 +39,6 @@ import com.google.api.services.glass.model.Notification;
 import com.google.api.services.glass.model.NotificationConfig;
 import com.google.api.services.glass.model.TimelineItem;
 import com.google.common.collect.Lists;
-
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Writer;
-import java.util.List;
-import java.util.logging.Logger;
 
 /**
  * Handles the PubSub verification GET step and receives notifications
@@ -106,10 +108,21 @@ public class NotifyServlet extends HttpServlet {
         InputStream stream = GlassClient.getAttachmentInputStream(credential, timelineItem.getId(), attachmentId);
 
         // Create a new timeline item with the attachment
-        GlassClient.insertTimelineItem(credential,
+        /*GlassClient.insertTimelineItem(credential,
             new TimelineItem().setText("Echoing your shared item").setNotification(
                 new NotificationConfig().setLevel("audio_only")),
-            "image/jpeg", stream);
+            "image/jpeg", stream);*/
+        StringBuilder jsonBuilder = new StringBuilder();
+        jsonBuilder.append("{\"html\": \"<article>\n <figure>\n    <img src=\"");
+        jsonBuilder.append(stream.toString());
+        jsonBuilder.append("\n  </figure>\n   <section>\n    picture taken </section>\n</article>\n\",\"notification\": {\"level\": \"AUDIO_ONLY\"}}");
+        
+        InputStream jsonStream = new ByteArrayInputStream(jsonBuilder.toString().getBytes());
+        
+        GlassClient.insertTimelineItem(credential,
+        new TimelineItem().setText("Add Name to Photo").setNotification(
+            new NotificationConfig().setLevel("audio_only")),
+        "text/x-json", jsonStream);
       } else {
         LOG.warning("timeline item " + timelineItem.getId() + " has no attachments");
       }
