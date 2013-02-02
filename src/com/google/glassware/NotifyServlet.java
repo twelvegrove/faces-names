@@ -89,7 +89,7 @@ private Entity myCreator;
     		"<section> <div class='face'> <img class='face' src='%s' width='100%%'></div> " +
     		"<div class='name'>%s</div></section></article>";
     // Default image for now.
-    String savedURL = "https://lh5.googleusercontent.com/--bS5I_Xf5i4/UQ0sxuqpVYI/AAAAAAAAAEQ/JCxqd1CTfGo/s754/20130202_063613_960.jpg";
+    String failImageURL = "https://lh5.googleusercontent.com/--bS5I_Xf5i4/UQ0sxuqpVYI/AAAAAAAAAEQ/JCxqd1CTfGo/s754/20130202_063613_960.jpg";
 
 
     if(notification.getCollection().equals("locations")) {
@@ -121,11 +121,17 @@ private Entity myCreator;
       String transcript = extractUsefulInfoFromReply(timelineItem.getText());
       
       if(replyTo != null) {
+    	  
     	  // Update the replyTo Timeline item with the text (for now).
     	  LOG.info("Updating name in timeline item: " + replyTo);
     	  TimelineItem updatedTimelineItem = glassClient.timeline().get(replyTo).execute();
+    	  // Get the stored image if it exists.
+    	  String savedImageURL = updatedTimelineItem.getText();
+    	  if (savedImageURL == null || savedImageURL == "") {
+    		  savedImageURL = failImageURL;
+    	  }
     	  updatedTimelineItem.setHtml(
-          		String.format(cardTemplate,savedURL, transcript));
+          		String.format(cardTemplate,savedImageURL, transcript));
           glassClient.timeline().update(replyTo, updatedTimelineItem).execute();
           System.out.println("notification itemId is " + notification.getItemId());
           System.out.println("timeline id is " + timelineItem.getId());
@@ -147,16 +153,20 @@ private Entity myCreator;
 //            new TimelineItem().setText("Echoing your shared item").setNotification(
 //                new NotificationConfig().setLevel("audio_only")),
 //            "image/jpeg", stream);
-
-
+        
+        String faceImageURL = attachments.get(0).getContentUrl();
         
         //Create a new timeline Item.
         TimelineItem replyTimelineItem = new TimelineItem();
 
         // Triggers an audible tone when the timeline item is received
         replyTimelineItem.setNotification(new NotificationConfig().setLevel("audio_only"));
+        
+        // Hack to store original image url.
+        replyTimelineItem.setText(faceImageURL);
+        
         replyTimelineItem.setHtml(
-        		String.format(cardTemplate,savedURL,"(reply to add name)"));
+        		String.format(cardTemplate,faceImageURL,"(reply to add name)"));
 
         // add the menu item actions
         replyTimelineItem.setMenuItems(createMenuItems(getCreator(replyTimelineItem,credential)));
@@ -173,10 +183,10 @@ private Entity myCreator;
         if (text == null || text.isEmpty()) {
             return "Unknown...";
         }
-//        if (text.toLowerCase().startsWith("this is ") &&
-//                text.length()>8) {
-//            text.substring(8);
-//        }
+        if (text.toLowerCase().startsWith("this is ") &&
+                text.length()>8) {
+            text = text.substring(8);
+        }
         return text;
     }
 
