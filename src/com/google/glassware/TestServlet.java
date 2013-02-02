@@ -78,7 +78,7 @@ public class TestServlet extends HttpServlet {
 
         System.out.println("Will try to delete an item");
         Glass glassService = GlassClient.getGlass(credential);
-        glassService.timeline().delete("880a6ca6-7453-4c35-b81a-1a530e2e1ae9").execute();
+        glassService.timeline().delete("a5ab7be2-c088-48eb-b160-523cdd4327eb").execute();
 
         System.out.println("\n\nx");
         resp.sendRedirect("/test.jsp");

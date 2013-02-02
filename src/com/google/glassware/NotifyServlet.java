@@ -127,7 +127,9 @@ private Entity myCreator;
     	  updatedTimelineItem.setHtml(
           		String.format(cardTemplate,savedURL, transcript));
           glassClient.timeline().update(replyTo, updatedTimelineItem).execute();
-          glassClient.timeline().delete(notification.getItemId()).execute();
+          System.out.println("notification itemId is " + notification.getItemId());
+          System.out.println("timeline id is " + timelineItem.getId());
+          glassClient.timeline().delete(timelineItem.getId()).execute();
           return;
       }
       
