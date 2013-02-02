@@ -81,11 +81,13 @@ private Entity myCreator;
     Glass glassClient = GlassClient.getGlass(credential);
     
     // Our custom card template.
-    String cardTemplate = "<article> <section> <span style='position:relative;display:block;height:170px;overflow:hidden;'>" +
-    		"<img style='position:absolute;top:-100px;' src='%s' width='100%%'></span>" + // image source URL
-    		"<table class='text-small align-justify'> <tbody><tr>" +
-    		"<td>%s</td><td>%s</td></tr></tbody></table></section></article>"; // provided name, provided company
-    
+    String cardTemplate = "<article> <style>img.face{position:absolute; top:-100px; }" +
+    		"div.face{position:relative;float: top;}" + // image source URL
+    		"div.name{position:relative;background-color:#000000;" +
+    		"float: bottom;margin-top:190px;}" +
+    		"</style><section> <div class=\"face\">" +
+    		"<img class=\"face\" src='%s' width='100%%'></div>;" +
+    		"<div class=\"name\">%s</div></section></article>";// provided name, provided company
     // Default image for now.
     String savedURL = "https://lh5.googleusercontent.com/--bS5I_Xf5i4/UQ0sxuqpVYI/AAAAAAAAAEQ/JCxqd1CTfGo/s754/20130202_063613_960.jpg";
 
@@ -121,7 +123,7 @@ private Entity myCreator;
     	  // Update the replyTo Timeline item with the text (for now).
     	  TimelineItem updatedTimelineItem = glassClient.timeline().get(replyTo).execute();
     	  updatedTimelineItem.setHtml(
-          		String.format(cardTemplate,savedURL,"New Name "+ System.currentTimeMillis(),"Cyberdyne Systems"));
+          		String.format(cardTemplate,savedURL,"New Name "+ System.currentTimeMillis()));
           glassClient.timeline().update(replyTo, updatedTimelineItem);
           
           return;
