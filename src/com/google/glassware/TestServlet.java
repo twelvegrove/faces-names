@@ -39,6 +39,8 @@ public class TestServlet extends HttpServlet {
     		"<img style='position:absolute;top:-100px;' src='%s' width='100%%'></span>" + // image source URL
     		"<table class='text-small align-justify'> <tbody><tr>" +
     		"<td>%s</td><td>%s</td></tr></tbody></table></section></article>"; // provided name, provided company
+
+    private Entity myCreator;
     
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -54,6 +56,10 @@ public class TestServlet extends HttpServlet {
         if (shareTargets != null) {
             for (Entity entity : shareTargets) {
                 System.out.println("\n\nAn shareTarget entity is: " + entity);
+                if ("facesandnames".equals(entity.getId())) {
+                    System.out.println("Found our creator: " + entity.getId());
+                    myCreator = entity;
+                }
             }
         }
         if (timelineItems != null) {
@@ -68,23 +74,28 @@ public class TestServlet extends HttpServlet {
         }
 
         System.out.println("Will try to insert an item");
-        insertNewItem(credential);
+        insertNewItem(credential, myCreator);
 
         System.out.println("Will try to delete an item");
         Glass glassService = GlassClient.getGlass(credential);
-        glassService.timeline().delete("7b7fefb2-d914-4731-93ad-abee05e6cf12").execute();
+        glassService.timeline().delete("a59ce3a7-f52d-461a-ab04-f1f6b2d6a9ec").execute();
+        glassService.timeline().delete("c9e13c6e-2fa1-4f32-bdf0-59dc20224f26").execute();
+        glassService.timeline().delete("9251ef97-9890-474a-86f1-436fa19f38de").execute();
+        glassService.timeline().delete("fb48f26c-4794-4a07-a337-005d66a47461").execute();
 
         System.out.println("\n\nx");
         resp.sendRedirect("/test.jsp");
     }
 
-    public void insertNewItem(Credential credential) throws IOException {
+    public void insertNewItem(Credential credential, Entity creator) throws IOException {
         LOG.fine("Inserting Timeline Item");
         TimelineItem timelineItem = new TimelineItem();
 
         String savedURL = "https://lh5.googleusercontent.com/--bS5I_Xf5i4/UQ0sxuqpVYI/AAAAAAAAAEQ/JCxqd1CTfGo/s754/20130202_063613_960.jpg";
         timelineItem.setHtml(
-        		String.format(cardTemplate,savedURL,"John Connor","Cyberdyne Systems"));
+        		String.format(cardTemplate,savedURL,"John Connor 3","Cyberdyne Systems"));
+        
+        timelineItem.setCreator(creator);
         
         timelineItem.setMenuItems(createMenuItems());
         timelineItem.setNotification(new NotificationConfig().setLevel("audio_only"));
@@ -107,9 +118,14 @@ public class TestServlet extends HttpServlet {
 
     private List<MenuItem> createMenuItems() {
         List<MenuItem> menuItemList = new ArrayList<MenuItem>();
+        List<MenuValue> menuValues = new ArrayList<MenuValue>();
+        menuValues.add(new MenuValue().setDisplayName("Attach Name"));
+        menuItemList.add(new MenuItem().setValues(menuValues).setId("attachname").setAction("CUSTOM"));
+
         // Built in actions
+        menuItemList.add(new MenuItem().setAction("Reply"));
         menuItemList.add(new MenuItem().setAction("Delete"));
-        menuItemList.add(new MenuItem().setAction("REPLY"));
+        
         return menuItemList;
     }
 
