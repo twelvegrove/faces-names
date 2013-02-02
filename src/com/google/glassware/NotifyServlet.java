@@ -192,6 +192,11 @@ private Entity myCreator;
                 text.length()>8) {
             text = text.substring(8);
         }
+        
+        if (text.toLowerCase().contains(" from ") &&
+        		text.length()> 6){
+        	text = text.replace(" from ", " , "); 
+        }
         return text;
     }
 
