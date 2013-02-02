@@ -158,6 +158,9 @@ private Entity myCreator;
         String faceImageURL = attachments.get(0).getContentUrl();
         LOG.info("ImageURL: " + faceImageURL);
         
+        //BACKUP PLAN : HARDCODE IMAGE.
+        faceImageURL = failImageURL;
+        
         //Create a new timeline Item.
         TimelineItem replyTimelineItem = new TimelineItem();
 
