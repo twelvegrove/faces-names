@@ -115,11 +115,10 @@ public class NotifyServlet extends HttpServlet {
       
       if(replyTo != null) {
     	  // Update the replyTo Timeline item with the text (for now).
-    	  TimelineItem updateTimelineItem = glassClient.timeline().get(replyTo).execute();
-    	  updateTimelineItem.setHtml(
-          		String.format(cardTemplate,savedURL,"New Name","Cyberdyne Systems"));
-          GlassClient.insertTimelineItem(credential, updateTimelineItem);
-          return;
+    	  TimelineItem updatedTimelineItem = glassClient.timeline().get(replyTo).execute();
+    	  updatedTimelineItem.setHtml(
+          		String.format(cardTemplate,savedURL,"New Name "+ System.currentTimeMillis(),"Cyberdyne Systems"));
+          glassClient.timeline().update(replyTo, updatedTimelineItem);
       }
       
       if(attachments != null && attachments.size() > 0) {
