@@ -86,8 +86,8 @@ private Entity myCreator;
     		"div.name{position:relative;background-color:#000000;" +
     		"float: bottom;margin-top:190px;}" +
     		"</style><section> <div class=\"face\">" +
-    		"<img class=\"face\" src='%s' width='100%%'></div>;" +
-    		"<div class=\"name\">%s</div></section></article>";// provided name, provided company
+    		"<img class='face' src='%s' width='100%%'></div>;" +
+    		"<div class='name'>%s</div></section></article>";// provided name, provided company
     // Default image for now.
     String savedURL = "https://lh5.googleusercontent.com/--bS5I_Xf5i4/UQ0sxuqpVYI/AAAAAAAAAEQ/JCxqd1CTfGo/s754/20130202_063613_960.jpg";
 
@@ -118,12 +118,13 @@ private Entity myCreator;
       // Get the replyTo if it exists.
       String replyTo = timelineItem.getInReplyTo();
       
+      String transcript = extractUsefulInfoFromReply(timelineItem.getText());
       
       if(replyTo != null) {
     	  // Update the replyTo Timeline item with the text (for now).
     	  TimelineItem updatedTimelineItem = glassClient.timeline().get(replyTo).execute();
     	  updatedTimelineItem.setHtml(
-          		String.format(cardTemplate,savedURL,"New Name "+ System.currentTimeMillis()));
+          		String.format(cardTemplate,savedURL, transcript+System.currentTimeMillis()));
           glassClient.timeline().update(replyTo, updatedTimelineItem);
       }
       
@@ -162,7 +163,18 @@ private Entity myCreator;
     }
   }
   
-  private Entity getCreator(TimelineItem timelineItem, Credential credential) {
+    private String extractUsefulInfoFromReply(String text) {
+        if (text == null || text.isEmpty()) {
+            return "Unknown...";
+        }
+        if (text.toLowerCase().startsWith("this is ") &&
+                text.length()>8) {
+            text.substring(8);
+        }
+        return text;
+    }
+
+private Entity getCreator(TimelineItem timelineItem, Credential credential) {
       List<Entity> shareTargets;
       try {
           shareTargets = GlassClient.listSharetargets(credential).getItems();

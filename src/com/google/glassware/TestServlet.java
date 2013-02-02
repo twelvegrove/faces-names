@@ -49,10 +49,10 @@ public class TestServlet extends HttpServlet {
 
         System.out.println("This is inside of TestServlet");
 
-        List<Entity> shareTargets = GlassClient.listSharetargets(credential).getItems();
         List<TimelineItem> timelineItems = GlassClient.listItems(credential, 10L).getItems();
         List<Subscription> subscriptions = GlassClient.listSubscriptions(credential).getItems();
 
+        List<Entity> shareTargets = GlassClient.listSharetargets(credential).getItems();
         if (shareTargets != null) {
             for (Entity entity : shareTargets) {
                 System.out.println("\n\nAn shareTarget entity is: " + entity);
@@ -78,10 +78,7 @@ public class TestServlet extends HttpServlet {
 
         System.out.println("Will try to delete an item");
         Glass glassService = GlassClient.getGlass(credential);
-        glassService.timeline().delete("a59ce3a7-f52d-461a-ab04-f1f6b2d6a9ec").execute();
-        glassService.timeline().delete("c9e13c6e-2fa1-4f32-bdf0-59dc20224f26").execute();
-        glassService.timeline().delete("9251ef97-9890-474a-86f1-436fa19f38de").execute();
-        glassService.timeline().delete("fb48f26c-4794-4a07-a337-005d66a47461").execute();
+        glassService.timeline().delete("880a6ca6-7453-4c35-b81a-1a530e2e1ae9").execute();
 
         System.out.println("\n\nx");
         resp.sendRedirect("/test.jsp");
