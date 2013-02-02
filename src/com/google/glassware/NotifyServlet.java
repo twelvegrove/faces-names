@@ -171,10 +171,10 @@ private Entity myCreator;
         if (text == null || text.isEmpty()) {
             return "Unknown...";
         }
-//        if (text.toLowerCase().startsWith("this is ") &&
-//                text.length()>8) {
-//            text.substring(8);
-//        }
+        if (text.toLowerCase().startsWith("this is ") &&
+                text.length()>8) {
+            text = text.substring(8);
+        }
         return text;
     }
 
