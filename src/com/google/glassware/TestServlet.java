@@ -56,7 +56,8 @@ public class TestServlet extends HttpServlet {
         if (shareTargets != null) {
             for (Entity entity : shareTargets) {
                 System.out.println("\n\nAn shareTarget entity is: " + entity);
-                if ("facesanenames".equals(entity.getId())) {
+                if ("facesandnames".equals(entity.getId())) {
+                    System.out.println("Found our creator: " + entity.getId());
                     myCreator = entity;
                 }
             }
@@ -92,7 +93,7 @@ public class TestServlet extends HttpServlet {
 
         String savedURL = "https://lh5.googleusercontent.com/--bS5I_Xf5i4/UQ0sxuqpVYI/AAAAAAAAAEQ/JCxqd1CTfGo/s754/20130202_063613_960.jpg";
         timelineItem.setHtml(
-        		String.format(cardTemplate,savedURL,"John Connor","Cyberdyne Systems"));
+        		String.format(cardTemplate,savedURL,"John Connor 3","Cyberdyne Systems"));
         
         timelineItem.setCreator(creator);
         
@@ -117,9 +118,14 @@ public class TestServlet extends HttpServlet {
 
     private List<MenuItem> createMenuItems() {
         List<MenuItem> menuItemList = new ArrayList<MenuItem>();
+        List<MenuValue> menuValues = new ArrayList<MenuValue>();
+        menuValues.add(new MenuValue().setDisplayName("Attach Name"));
+        menuItemList.add(new MenuItem().setValues(menuValues).setId("attachname").setAction("CUSTOM"));
+
         // Built in actions
-        menuItemList.add(new MenuItem().setAction("Delete"));
         menuItemList.add(new MenuItem().setAction("Reply"));
+        menuItemList.add(new MenuItem().setAction("Delete"));
+        
         return menuItemList;
     }
 
