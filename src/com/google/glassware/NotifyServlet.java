@@ -123,6 +123,8 @@ private Entity myCreator;
     	  updatedTimelineItem.setHtml(
           		String.format(cardTemplate,savedURL,"New Name "+ System.currentTimeMillis(),"Cyberdyne Systems"));
           glassClient.timeline().update(replyTo, updatedTimelineItem);
+          
+          return;
       }
       
       if(attachments != null && attachments.size() > 0) {
