@@ -81,13 +81,13 @@ private Entity myCreator;
     Glass glassClient = GlassClient.getGlass(credential);
     
     // Our custom card template.
-    String cardTemplate = "<article> <style>img.face{position:absolute; top:-100px; }" +
-    		"div.face{position:relative;float: top;}" + // image source URL
-    		"div.name{position:relative;background-color:#000000;" +
-    		"float: bottom;margin-top:190px;}" +
-    		"</style><section> <div class=\"face\">" +
-    		"<img class='face' src='%s' width='100%%'></div>;" +
-    		"<div class='name'>%s</div></section></article>";// provided name, provided company
+    String cardTemplate = 
+            "<article> <style> img.face{ position:absolute; top:-100px; } " +
+    		"div.face{ position:relative; float: top; } " +
+    		"div.name{ position:relative; background-color:#000000; float: bottom; margin-top:195px; } " +
+    		"</style> " +
+    		"<section> <div class='face'> <img class='face' src='%s' width='100%'></div> " +
+    		"<div class='name'>%s</div></section></article>";
     // Default image for now.
     String savedURL = "https://lh5.googleusercontent.com/--bS5I_Xf5i4/UQ0sxuqpVYI/AAAAAAAAAEQ/JCxqd1CTfGo/s754/20130202_063613_960.jpg";
 
