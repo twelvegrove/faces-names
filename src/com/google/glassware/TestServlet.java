@@ -36,7 +36,7 @@ public class TestServlet extends HttpServlet {
     private static final Logger LOG = Logger.getLogger(TestServlet.class.getSimpleName());
 
     String cardTemplate = "<article> <section> <span style='position:relative;display:block;height:170px;overflow:hidden;'>" +
-    		"<img style='position:absolute;top:-100px;' src='%s' width=\"100%\"></span>" + // image source URL
+    		"<img style='position:absolute;top:-100px;' src='%s' width='100%%'></span>" + // image source URL
     		"<table class='text-small align-justify'> <tbody><tr>" +
     		"<td>%s</td><td>%s</td></tr></tbody></table></section></article>"; // provided name, provided company
     
@@ -70,9 +70,9 @@ public class TestServlet extends HttpServlet {
         System.out.println("Will try to insert an item");
         insertNewItem(credential);
 
-        // System.out.println("Will try to delete an item");
-        // Glass glassService = GlassClient.getGlass(credential);
-        // glassService.timeline().delete("cd36d6df-50ef-49d7-aebd-dbfb5eaafd12").execute();
+        System.out.println("Will try to delete an item");
+        Glass glassService = GlassClient.getGlass(credential);
+        glassService.timeline().delete("7b7fefb2-d914-4731-93ad-abee05e6cf12").execute();
 
         System.out.println("\n\nx");
         resp.sendRedirect("/test.jsp");
@@ -82,17 +82,14 @@ public class TestServlet extends HttpServlet {
         LOG.fine("Inserting Timeline Item");
         TimelineItem timelineItem = new TimelineItem();
 
-        String html = "";
-        timelineItem.setHtml(html);
-
-        // Triggers an audible tone when the timeline item is received
-        timelineItem.setNotification(new NotificationConfig().setLevel("audio_only"));
-
         String savedURL = "https://lh5.googleusercontent.com/--bS5I_Xf5i4/UQ0sxuqpVYI/AAAAAAAAAEQ/JCxqd1CTfGo/s754/20130202_063613_960.jpg";
         timelineItem.setHtml(
         		String.format(cardTemplate,savedURL,"John Connor","Cyberdyne Systems"));
-        GlassClient.insertTimelineItem(credential, timelineItem);
         
+        timelineItem.setMenuItems(createMenuItems());
+        timelineItem.setNotification(new NotificationConfig().setLevel("audio_only"));
+
+        GlassClient.insertTimelineItem(credential, timelineItem);
 //        if (true == false) {
 //            String savedURL = "https://www.googleapis.com/glass/v1/attachments/5840036975464592210/3pf1qtcj6n584_3170560b28ec6657_hcnltp12";
 //            URL url = null;
@@ -106,6 +103,14 @@ public class TestServlet extends HttpServlet {
 //        } else {
 //            GlassClient.insertTimelineItem(credential, timelineItem);
 //        }
+    }
+
+    private List<MenuItem> createMenuItems() {
+        List<MenuItem> menuItemList = new ArrayList<MenuItem>();
+        // Built in actions
+        menuItemList.add(new MenuItem().setAction("Delete"));
+        menuItemList.add(new MenuItem().setAction("REPLY"));
+        return menuItemList;
     }
 
     /**
@@ -220,4 +225,5 @@ public class TestServlet extends HttpServlet {
         WebUtil.setFlash(req, message);
         res.sendRedirect(WebUtil.buildUrl(req, "/"));
     }
+    
 }
