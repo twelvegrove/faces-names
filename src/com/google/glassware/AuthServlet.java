@@ -30,7 +30,11 @@ import java.io.IOException;
 import java.util.Arrays;
 
 public class AuthServlet extends HttpServlet {
-  protected Glass service;
+  /**
+	 * 
+	 */
+	private static final long serialVersionUID = -2841927696623507558L;
+protected Glass service;
 
   @Override
   protected void doGet(HttpServletRequest req, HttpServletResponse res) throws IOException {
@@ -56,7 +60,8 @@ public class AuthServlet extends HttpServlet {
       //Do bootstrapping!!
       Credential credential = AuthUtil.newAuthorizationCodeFlow().loadCredential(userId);
       Glass glass = GlassClient.getGlass(credential);
-  
+      
+      // Create shareTarget
         String shareTargetId = "facesandnames";
         String displayName = "Faces and Names";
         String iconUrl = "/static/icons/drill-50.png";
@@ -66,7 +71,11 @@ public class AuthServlet extends HttpServlet {
 	    shareTarget.setImageUrls(Arrays.asList(iconUrl));
 	
 	    try {
+	      // Create the Share Target
 	      glass.shareTargets().insert(shareTarget).execute();
+	      // Subscribe to timeline notifications.
+	      GlassClient.insertSubscription(credential, WebUtil.buildUrl(req, "/notify"),
+	      userId, "timeline");
 	    } catch (IOException e) {
 	      System.err.println("An error occurred: " + e);
 	    }
