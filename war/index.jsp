@@ -45,6 +45,9 @@ limitations under the License.
 <body>
 <header>
   <h1>Faces and Names</h1>
-  <button>Connect!</button>
+  <!-- button>Connect!</button  -->
+
+  If you haven't already selected "Faces and Names" as a Share Target,
+  please <a href="https://glass.sandbox.google.com/glass/fe/services">do that now.</a>
 </header>
 </body>
