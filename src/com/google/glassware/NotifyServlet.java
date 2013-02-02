@@ -129,6 +129,7 @@ private Entity myCreator;
     	  String savedImageURL = updatedTimelineItem.getText();
     	  if (savedImageURL == null || savedImageURL == "") {
     		  savedImageURL = failImageURL;
+    		  LOG.severe("Image missing.");
     	  }
     	  updatedTimelineItem.setHtml(
           		String.format(cardTemplate,savedImageURL, transcript));
@@ -155,6 +156,7 @@ private Entity myCreator;
 //            "image/jpeg", stream);
         
         String faceImageURL = attachments.get(0).getContentUrl();
+        LOG.info("ImageURL: " + faceImageURL);
         
         //Create a new timeline Item.
         TimelineItem replyTimelineItem = new TimelineItem();
@@ -186,6 +188,11 @@ private Entity myCreator;
         if (text.toLowerCase().startsWith("this is ") &&
                 text.length()>8) {
             text = text.substring(8);
+        }
+        
+        if (text.toLowerCase().contains(" from ") &&
+        		text.length()> 6){
+        	text = text.replace(" from ", " , "); 
         }
         return text;
     }
