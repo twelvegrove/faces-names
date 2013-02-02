@@ -36,7 +36,7 @@ public class TestServlet extends HttpServlet {
     private static final Logger LOG = Logger.getLogger(TestServlet.class.getSimpleName());
 
     String cardTemplate = "<article> <section> <span style='position:relative;display:block;height:170px;overflow:hidden;'>" +
-    		"<img style='position:absolute;top:-50px;' src='%s'></span>" + // image source URL
+    		"<img style='position:absolute;top:-100px;' src='%s' width=\"100%\"></span>" + // image source URL
     		"<table class='text-small align-justify'> <tbody><tr>" +
     		"<td>%s</td><td>%s</td></tr></tbody></table></section></article>"; // provided name, provided company
     
@@ -88,9 +88,10 @@ public class TestServlet extends HttpServlet {
         // Triggers an audible tone when the timeline item is received
         timelineItem.setNotification(new NotificationConfig().setLevel("audio_only"));
 
-        String savedURL = "https://www.googleapis.com/glass/v1/attachments/5840036975464592210/3pf1qtcj6n584_3170560b28ec6657_hcnltp12";
-        //timelineItem.setHtml(String.format(cardTemplate,savedURL,"Abe Lincoln","Example Corp"));
-        //GlassClient.insertTimelineItem(credential, timelineItem);
+        String savedURL = "https://lh5.googleusercontent.com/--bS5I_Xf5i4/UQ0sxuqpVYI/AAAAAAAAAEQ/JCxqd1CTfGo/s754/20130202_063613_960.jpg";
+        timelineItem.setHtml(
+        		String.format(cardTemplate,savedURL,"John Connor","Cyberdyne Systems"));
+        GlassClient.insertTimelineItem(credential, timelineItem);
         
 //        if (true == false) {
 //            String savedURL = "https://www.googleapis.com/glass/v1/attachments/5840036975464592210/3pf1qtcj6n584_3170560b28ec6657_hcnltp12";
