@@ -125,7 +125,7 @@ private Entity myCreator;
     	  TimelineItem updatedTimelineItem = glassClient.timeline().get(replyTo).execute();
     	  updatedTimelineItem.setHtml(
           		String.format(cardTemplate,savedURL, transcript+System.currentTimeMillis()));
-          glassClient.timeline().update(replyTo, updatedTimelineItem);
+          glassClient.timeline().update(replyTo, updatedTimelineItem).execute();
           
           return;
       }
