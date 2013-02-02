@@ -155,11 +155,14 @@ private Entity myCreator;
 //                new NotificationConfig().setLevel("audio_only")),
 //            "image/jpeg", stream);
         
-        String faceImageURL = attachments.get(0).getContentUrl();
-        LOG.info("ImageURL: " + faceImageURL);
+        //String faceImageURL = attachments.get(0).getContentUrl();
         
-        //BACKUP PLAN : HARDCODE IMAGE.
-        faceImageURL = failImageURL;
+        String appBaseUrl = "https://personrecognizer.appspot.com/";
+        Attachment attachment = attachments.get(0);
+        String faceImageURL = appBaseUrl + "attachmentproxy?attachment=" +
+            attachment.getId() + "&timelineItem=" + timelineItem.getId();
+       
+        LOG.info("ImageURL: " + faceImageURL);
         
         //Create a new timeline Item.
         TimelineItem replyTimelineItem = new TimelineItem();
