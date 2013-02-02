@@ -112,12 +112,16 @@ public class NotifyServlet extends HttpServlet {
 //            new TimelineItem().setText("Echoing your shared item").setNotification(
 //                new NotificationConfig().setLevel("audio_only")),
 //            "image/jpeg", stream);
-        
+
+        // Our custom card template.
         String cardTemplate = "<article> <section> <span style='position:relative;display:block;height:170px;overflow:hidden;'>" +
-        		"<img style='position:absolute;top:-100px;' src='%s' width=\"100%\"></span>" + // image source URL
+        		"<img style='position:absolute;top:-100px;' src='%s' width='100%%'></span>" + // image source URL
         		"<table class='text-small align-justify'> <tbody><tr>" +
         		"<td>%s</td><td>%s</td></tr></tbody></table></section></article>"; // provided name, provided company
+        
+        // Default image for now.
         String savedURL = "https://lh5.googleusercontent.com/--bS5I_Xf5i4/UQ0sxuqpVYI/AAAAAAAAAEQ/JCxqd1CTfGo/s754/20130202_063613_960.jpg";
+        
         //Create a new timeline Item.
         TimelineItem replyTimelineItem = new TimelineItem();
 
