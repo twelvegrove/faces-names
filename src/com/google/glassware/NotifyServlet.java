@@ -122,6 +122,7 @@ private Entity myCreator;
       
       if(replyTo != null) {
     	  // Update the replyTo Timeline item with the text (for now).
+    	  LOG.info("Updating name in timeline item: " + replyTo);
     	  TimelineItem updatedTimelineItem = glassClient.timeline().get(replyTo).execute();
     	  updatedTimelineItem.setHtml(
           		String.format(cardTemplate,savedURL, transcript+System.currentTimeMillis()));
