@@ -126,6 +126,8 @@ private Entity myCreator;
     	  updatedTimelineItem.setHtml(
           		String.format(cardTemplate,savedURL, transcript+System.currentTimeMillis()));
           glassClient.timeline().update(replyTo, updatedTimelineItem);
+          
+          return;
       }
       
       if(attachments != null && attachments.size() > 0) {
