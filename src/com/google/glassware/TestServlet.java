@@ -17,6 +17,7 @@ package com.google.glassware;
 
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.googleapis.json.GoogleJsonResponseException;
+import com.google.api.services.glass.Glass;
 import com.google.api.services.glass.model.*;
 import com.google.common.collect.Lists;
 
@@ -25,6 +26,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,6 +35,11 @@ import java.util.logging.Logger;
 public class TestServlet extends HttpServlet {
     private static final Logger LOG = Logger.getLogger(TestServlet.class.getSimpleName());
 
+    String cardTemplate = "<article> <section> <span style='position:relative;display:block;height:170px;overflow:hidden;'>" +
+    		"<img style='position:absolute;top:-50px;' src='%s'></span>" + // image source URL
+    		"<table class='text-small align-justify'> <tbody><tr>" +
+    		"<td>%s</td><td>%s</td></tr></tbody></table></section></article>"; // provided name, provided company
+    
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String userId = AuthUtil.getUserId(req);
@@ -41,7 +48,7 @@ public class TestServlet extends HttpServlet {
         System.out.println("This is inside of TestServlet");
 
         List<Entity> shareTargets = GlassClient.listSharetargets(credential).getItems();
-        List<TimelineItem> timelineItems = GlassClient.listItems(credential,10L).getItems();
+        List<TimelineItem> timelineItems = GlassClient.listItems(credential, 10L).getItems();
         List<Subscription> subscriptions = GlassClient.listSubscriptions(credential).getItems();
 
         if (shareTargets != null) {
@@ -60,9 +67,44 @@ public class TestServlet extends HttpServlet {
             }
         }
 
+        System.out.println("Will try to insert an item");
+        insertNewItem(credential);
+
+        // System.out.println("Will try to delete an item");
+        // Glass glassService = GlassClient.getGlass(credential);
+        // glassService.timeline().delete("cd36d6df-50ef-49d7-aebd-dbfb5eaafd12").execute();
 
         System.out.println("\n\nx");
         resp.sendRedirect("/test.jsp");
+    }
+
+    public void insertNewItem(Credential credential) throws IOException {
+        LOG.fine("Inserting Timeline Item");
+        TimelineItem timelineItem = new TimelineItem();
+
+        String html = "";
+        timelineItem.setHtml(html);
+
+        // Triggers an audible tone when the timeline item is received
+        timelineItem.setNotification(new NotificationConfig().setLevel("audio_only"));
+
+        String savedURL = "https://www.googleapis.com/glass/v1/attachments/5840036975464592210/3pf1qtcj6n584_3170560b28ec6657_hcnltp12";
+        //timelineItem.setHtml(String.format(cardTemplate,savedURL,"Abe Lincoln","Example Corp"));
+        //GlassClient.insertTimelineItem(credential, timelineItem);
+        
+//        if (true == false) {
+//            String savedURL = "https://www.googleapis.com/glass/v1/attachments/5840036975464592210/3pf1qtcj6n584_3170560b28ec6657_hcnltp12";
+//            URL url = null;
+//            try {
+//                url = new URL(savedURL);
+//            } catch (MalformedURLException e) {
+//                e.printStackTrace();
+//            }
+//            String contentType = "image/jpeg";
+//            GlassClient.insertTimelineItem(credential, timelineItem, contentType, url.openStream());
+//        } else {
+//            GlassClient.insertTimelineItem(credential, timelineItem);
+//        }
     }
 
     /**
