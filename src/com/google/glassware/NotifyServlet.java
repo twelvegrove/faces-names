@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Writer;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -33,8 +34,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.services.glass.Glass;
 import com.google.api.services.glass.model.Attachment;
+import com.google.api.services.glass.model.Entity;
 import com.google.api.services.glass.model.Location;
 import com.google.api.services.glass.model.MenuItem;
+import com.google.api.services.glass.model.MenuValue;
 import com.google.api.services.glass.model.Notification;
 import com.google.api.services.glass.model.NotificationConfig;
 import com.google.api.services.glass.model.TimelineItem;
@@ -48,6 +51,7 @@ import com.google.common.collect.Lists;
 public class NotifyServlet extends HttpServlet {
   private static final Logger LOG = Logger.getLogger(MainServlet.class.getSimpleName());
   private static final ObjectMapper MAPPER = new ObjectMapper();
+private Entity myCreator;
 
   @Override
   protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -129,6 +133,9 @@ public class NotifyServlet extends HttpServlet {
         replyTimelineItem.setNotification(new NotificationConfig().setLevel("audio_only"));
         replyTimelineItem.setHtml(
         		String.format(cardTemplate,savedURL,"John Connor","Cyberdyne Systems"));
+
+        // add the menu item actions
+        replyTimelineItem.setMenuItems(createMenuItems(getCreator(replyTimelineItem,credential)));
         GlassClient.insertTimelineItem(credential, replyTimelineItem);
         
       } else {
@@ -136,4 +143,38 @@ public class NotifyServlet extends HttpServlet {
       }
     }
   }
+  
+  private Entity getCreator(TimelineItem timelineItem, Credential credential) {
+      List<Entity> shareTargets;
+      try {
+          shareTargets = GlassClient.listSharetargets(credential).getItems();
+      } catch (IOException e) {
+          return null;
+      }
+      if (shareTargets == null) {
+          return null;
+      }
+
+      for (Entity entity : shareTargets) {
+          System.out.println("\n\nAn shareTarget entity is: " + entity);
+          if ("facesandnames".equals(entity.getId())) {
+              System.out.println("Found our creator: " + entity.getId());
+              timelineItem.setCreator(entity);
+              myCreator = entity;
+              return entity;
+          }
+      }
+      return null;
+  }
+  
+  private List<MenuItem> createMenuItems(Entity entity) {
+      List<MenuItem> menuItemList = new ArrayList<MenuItem>();
+
+      // Built in actions
+      menuItemList.add(new MenuItem().setAction("Reply"));
+      menuItemList.add(new MenuItem().setAction("Delete"));
+      
+      return menuItemList;
+  }
+
 }
