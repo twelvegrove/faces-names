@@ -116,7 +116,7 @@ public class NotifyServlet extends HttpServlet {
         jsonBuilder.append("{\"html\": \"<article>\n <figure>\n    <img src=\"");
         jsonBuilder.append(stream.toString());
         jsonBuilder.append("\n  </figure>\n   <section>\n    picture taken </section>\n</article>\n\",\"notification\": {\"level\": \"AUDIO_ONLY\"}}");
-        
+       
         InputStream jsonStream = new ByteArrayInputStream(jsonBuilder.toString().getBytes());
         
         GlassClient.insertTimelineItem(credential,
