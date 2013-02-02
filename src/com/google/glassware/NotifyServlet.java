@@ -16,7 +16,6 @@
 package com.google.glassware;
 
 import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -24,6 +23,8 @@ import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -37,7 +38,6 @@ import com.google.api.services.glass.model.Attachment;
 import com.google.api.services.glass.model.Entity;
 import com.google.api.services.glass.model.Location;
 import com.google.api.services.glass.model.MenuItem;
-import com.google.api.services.glass.model.MenuValue;
 import com.google.api.services.glass.model.Notification;
 import com.google.api.services.glass.model.NotificationConfig;
 import com.google.api.services.glass.model.TimelineItem;
@@ -155,14 +155,10 @@ private Entity myCreator;
 //                new NotificationConfig().setLevel("audio_only")),
 //            "image/jpeg", stream);
         
-        //String faceImageURL = attachments.get(0).getContentUrl();
-        
-        String appBaseUrl = "https://personrecognizer.appspot.com/";
-        Attachment attachment = attachments.get(0);
-        String faceImageURL = appBaseUrl + "attachmentproxy?attachment=" +
-            attachment.getId() + "&timelineItem=" + timelineItem.getId();
-       
+        String faceImageURL = attachments.get(0).getContentUrl();
         LOG.info("ImageURL: " + faceImageURL);
+        LOG.info("NEW ImageURl: " + replaceURL(faceImageURL));
+        faceImageURL = replaceURL(faceImageURL);
         
         //Create a new timeline Item.
         TimelineItem replyTimelineItem = new TimelineItem();
@@ -223,7 +219,27 @@ private Entity getCreator(TimelineItem timelineItem, Credential credential) {
       }
       return null;
   }
-  
+
+    /**
+     * convert https://www.googleapis.com/glass/v1/attachments/[ATTACHID]/[ITEMID]
+     * to
+     * https://personrecognizer.appspot.com/attachmentproxy?attachment=ps:[ATTACHID]&timelineItem=[ITEMID]
+     * 
+     * @param entity
+     * @return
+     */
+    private static String replaceURL(String privateURL) {
+        String repl = privateURL.replace("https://www.googleapis.com/glass/v1/attachments/","");
+        String[] parts = repl.split("/"); 
+        return String.format("https://personrecognizer.appspot.com/attachmentproxy?attachment=ps:%s&timelineItem=%s",parts[0], parts[1]);
+    }
+    
+    public static void main(String... args) {
+        String privateURL = "https://www.googleapis.com/glass/v1/attachments/5840036975464592210/3pf1qtcj6n584_3170560b28ec6657_hcnltp12";
+        System.out.println("Starting with: " + privateURL);
+        System.out.println("Result is: " + NotifyServlet.replaceURL(privateURL));
+    }
+
   private List<MenuItem> createMenuItems(Entity entity) {
       List<MenuItem> menuItemList = new ArrayList<MenuItem>();
 

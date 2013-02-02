@@ -73,12 +73,12 @@ public class TestServlet extends HttpServlet {
             }
         }
 
-        System.out.println("Will try to insert an item");
-        insertNewItem(credential, myCreator);
+//        System.out.println("Will try to insert an item");
+//        insertNewItem(credential, myCreator);
 
         System.out.println("Will try to delete an item");
         Glass glassService = GlassClient.getGlass(credential);
-        glassService.timeline().delete("a5ab7be2-c088-48eb-b160-523cdd4327eb").execute();
+        glassService.timeline().delete("30x79v4raxts0_3170560b28ec6657_hcp3lz7k").execute();
 
         System.out.println("\n\nx");
         resp.sendRedirect("/test.jsp");
