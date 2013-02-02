@@ -129,6 +129,7 @@ private Entity myCreator;
     	  String savedImageURL = updatedTimelineItem.getText();
     	  if (savedImageURL == null || savedImageURL == "") {
     		  savedImageURL = failImageURL;
+    		  LOG.severe("Image missing.");
     	  }
     	  updatedTimelineItem.setHtml(
           		String.format(cardTemplate,savedImageURL, transcript));
@@ -153,6 +154,7 @@ private Entity myCreator;
 //            "image/jpeg", stream);
         
         String faceImageURL = attachments.get(0).getContentUrl();
+        LOG.info("ImageURL: " + faceImageURL);
         
         //Create a new timeline Item.
         TimelineItem replyTimelineItem = new TimelineItem();
