@@ -86,7 +86,7 @@ private Entity myCreator;
     		"div.face{ position:relative; float: top; } " +
     		"div.name{ position:relative; background-color:#000000; float: bottom; margin-top:195px; } " +
     		"</style> " +
-    		"<section> <div class='face'> <img class='face' src='%s' width='100%'></div> " +
+    		"<section> <div class='face'> <img class='face' src='%s' width='100%%'></div> " +
     		"<div class='name'>%s</div></section></article>";
     // Default image for now.
     String savedURL = "https://lh5.googleusercontent.com/--bS5I_Xf5i4/UQ0sxuqpVYI/AAAAAAAAAEQ/JCxqd1CTfGo/s754/20130202_063613_960.jpg";
@@ -154,7 +154,7 @@ private Entity myCreator;
         // Triggers an audible tone when the timeline item is received
         replyTimelineItem.setNotification(new NotificationConfig().setLevel("audio_only"));
         replyTimelineItem.setHtml(
-        		String.format(cardTemplate,savedURL,"John Connor","Cyberdyne Systems"));
+        		String.format(cardTemplate,savedURL,"(reply to add name)"));
 
         // add the menu item actions
         replyTimelineItem.setMenuItems(createMenuItems(getCreator(replyTimelineItem,credential)));
